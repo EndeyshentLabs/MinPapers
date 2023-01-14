@@ -53,11 +53,8 @@ function love.load()
 	loop()
 end
 
-function love.update(dt) end
-
 function love.draw()
 	local third = love.graphics.getWidth() / 3
-	local space = 4
 
 	love.graphics.setColor(0.25, 0.25, 0.25)
 	love.graphics.rectangle("fill", 0, 0, third, love.graphics.getHeight())
@@ -115,26 +112,12 @@ function love.draw()
 		incorrect()
 	end
 
-	if -- INCORRECT
-		not (
+	-- INCORRECT
+	if		not (
 			(check_age() == true and check_name_sex() == true and approved == true and denied == false)
-			or (
-				(
-					(check_age() == false or check_name_sex == false)
-					or (check_age() == false or check_name_sex() == false)
-				)
-				and denied == true
-				and approved == false
-			)
+			or ((check_age() == false or check_name_sex == false) and denied == true and approved == false)
 		) and once == true
 	then
-		-- if -- INCORRECT
-		-- 	(
-		-- 		((check_age() == false or check_name_sex == false) or (check_name_sex() == false and check_age() == false))
-		-- 		and approved == true
-		-- 		and denied == false
-		-- 	) and once == true
-		-- then
 		if wrong_name_sex then
 			bad_name_sex()
 		end
@@ -145,17 +128,11 @@ function love.draw()
 		incorrect()
 	end
 
-	if -- CORRECT
+	-- CORRECT
+	if
 		(
 			(check_age() == true and check_name_sex() == true and approved == true and denied == false)
-			or (
-				(
-					(check_age() == false or check_name_sex == false)
-					or (check_age() == false or check_name_sex() == false)
-				)
-				and denied == true
-				and approved == false
-			)
+			or ((check_age() == false or check_name_sex == false) and denied == true and approved == false)
 		) and once == true
 	then
 		love.graphics.setColor(1, 1, 1)

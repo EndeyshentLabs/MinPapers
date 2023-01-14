@@ -3,5 +3,5 @@ countries = {
 }
 
 nations = {
-	"Zochian"
+	"Zochian",
 }
