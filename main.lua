@@ -2,6 +2,16 @@ require("utils")
 require("names")
 require("country")
 
+--[[
+	Palette:
+	HEX      NAME
+	#292023  BG
+	#ff3139  LIGHT RED
+	#861322  DARK RED
+	#c7e995  LIGHT GREEN
+	#7c9e83  FOREST GREEN
+]]--
+
 local font = nil
 
 -- Constants
@@ -60,9 +70,9 @@ end
 function love.draw()
 	local third = love.graphics.getWidth() / 3
 
-	love.graphics.setColor(0.25, 0.25, 0.25)
+	setColorHEX("#7c9e83")
 	love.graphics.rectangle("fill", 0, 0, third, love.graphics.getHeight())
-	love.graphics.setColor(0.36, 0.36, 0.36)
+	setColorHEX("#292023")
 	love.graphics.rectangle("fill", third, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
 	love.graphics.setColor(1, 1, 1)
@@ -130,7 +140,7 @@ function love.draw()
 			)
 		) and once == true
 	then
-		love.graphics.setColor(1, 1, 1)
+		setColorHEX("#292023")
 		love.graphics.print("WHAT WAS WRONG HERE:", font, 0, 0)
 		if wrong_name_sex then
 			bad_name_sex()
@@ -220,7 +230,7 @@ function check_age()
 end
 
 function bad_name_sex()
-	love.graphics.setColor(1, 0, 0)
+	setColorHEX("#861322")
 	love.graphics.print(
 		"\nERROR: PASSPORT FORGED"
 			.. "\nDETAILS:"
@@ -234,7 +244,7 @@ function bad_name_sex()
 end
 
 function bad_age()
-	love.graphics.setColor(1, 0, 0)
+	setColorHEX("#861322")
 	love.graphics.print(
 		"\nERROR: PASSPORT FORGED"
 			.. "\nDETAILS:"
@@ -254,7 +264,7 @@ function all()
 end
 
 function correct()
-	love.graphics.setColor(0, 1, 0)
+	setColorHEX("#7c9e83")
 	love.graphics.rectangle(
 		"fill",
 		love.graphics.getWidth() / 2,
@@ -263,7 +273,7 @@ function correct()
 		love.graphics.getHeight() / 2
 	)
 
-	love.graphics.setColor(1, 1, 1)
+	setColorHEX("#292023")
 	love.graphics.print(
 		"CORRECT!\nPRESS 'R' TO RESTART",
 		font,
@@ -273,7 +283,7 @@ function correct()
 end
 
 function incorrect()
-	love.graphics.setColor(1, 0, 0)
+	setColorHEX("#ff3139")
 	love.graphics.rectangle(
 		"fill",
 		love.graphics.getWidth() / 2,
@@ -282,7 +292,7 @@ function incorrect()
 		love.graphics.getHeight() / 2
 	)
 
-	love.graphics.setColor(1, 1, 1)
+	setColorHEX("#292023")
 	love.graphics.print(
 		"INCORRECT!\nPRESS 'R' TO RESTART",
 		font,
