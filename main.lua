@@ -10,7 +10,8 @@ require("country")
 	#861322  DARK RED
 	#c7e995  LIGHT GREEN
 	#7c9e83  FOREST GREEN
-]]--
+]]
+--
 
 local font = nil
 
@@ -75,7 +76,7 @@ function love.draw()
 	setColorHEX("#292023")
 	love.graphics.rectangle("fill", third, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
-	love.graphics.setColor(1, 1, 1)
+	setColorHEX("#c7e995")
 	love.graphics.print(
 		"PASSPORT"
 			.. "\n    NAME: "
@@ -234,9 +235,12 @@ function bad_name_sex()
 	love.graphics.print(
 		"\nERROR: PASSPORT FORGED"
 			.. "\nDETAILS:"
-			.. "\n    SEX: " .. sex
-			.. "\n    NAME: " .. name
-			.. "\n    REAL SEX: " .. real_sex,
+			.. "\n    SEX: "
+			.. sex
+			.. "\n    NAME: "
+			.. name
+			.. "\n    REAL SEX: "
+			.. real_sex,
 		font,
 		0,
 		0
