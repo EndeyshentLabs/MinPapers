@@ -4,12 +4,16 @@ require("country")
 
 local font = nil
 
+-- Constants
+local MAX_AGE = 80
+local MIN_PASSPORT_AGE = 16
+
 local name = "POGLIN" -- Default impossible values
 local age = -11037
 local country = "Luare"
 local nation = "Luarean"
 local sex = "femboy"
-local name_s = nil
+local real_sex = nil
 
 local denied = false
 local approved = false
@@ -35,7 +39,7 @@ local function loop()
 		name = female[math.random(#female)]
 	end
 
-	age = math.random(80)
+	age = math.random(MAX_AGE)
 	country = countries[math.random(#countries)]
 	nation = nations[math.random(#nations)]
 
@@ -89,13 +93,13 @@ function love.draw()
 			.. "\n    'S' - DENY"
 			.. "\n    'L' - CLEAR APPROVE"
 			.. "\n    'K' - CLEAR DENY"
-			.. "\nGAMEPLAY:"
+			.. "\n    'ENTER' - CONFIRM"
+			.. "\nHOW TO PLAY:"
 			.. "\n    1. CHECK NAME AND SEX"
-			.. "\n    1.1. IF INCORRECT, PRESS 'K' THEN 'S' THEN 'ENTER'"
-			.. "\n    1.2. IF CORRECT, PRESS 'L' THEN 'A' THEN 'ENTER'"
+			.. "\n    1.1. IF INCORRECT, PRESS 'L' THEN 'S' THEN 'ENTER'"
 			.. "\n    2. CHECK AGE"
-			.. "\n    2.1 IF INCORRECT, PRESS 'K' THEN 'S' THEN 'ENTER'"
-			.. "\n    2.2 IF CORRECT, PRESS 'L' THEN 'A' THEN 'ENTER'",
+			.. "\n    2.1 IF INCORRECT, PRESS 'L' THEN 'S' THEN 'ENTER'"
+			.. "\n    3. IF ALL IS CORRECT PRESS 'K' THEN 'A' THEN 'ENTER'",
 		font,
 		love.graphics.getWidth() / 2,
 		love.graphics.getHeight() / 2
@@ -112,10 +116,42 @@ function love.draw()
 		incorrect()
 	end
 
-	-- INCORRECT
-	if		not (
+	-- CORRECT
+	if
+		(
 			(check_age() == true and check_name_sex() == true and approved == true and denied == false)
-			or ((check_age() == false or check_name_sex == false) and denied == true and approved == false)
+			or (
+				(
+					(check_age() == false or check_name_sex() == false)
+					or (check_age() == false and check_name_sex() == false)
+				)
+				and denied == true
+				and approved == false
+			)
+		) and once == true
+	then
+		love.graphics.setColor(1, 1, 1)
+		love.graphics.print("WHAT WAS WRONG HERE:", font, 0, 0)
+		if wrong_name_sex then
+			bad_name_sex()
+		end
+		if wrong_age then
+			bad_age()
+		end
+		correct()
+
+	-- INCORRECT
+	elseif
+		not (
+			(check_age() == true and check_name_sex() == true and approved == true and denied == false)
+			or (
+				(
+					(check_age() == false or check_name_sex() == false)
+					or (check_age() == false and check_name_sex() == false)
+				)
+				and denied == true
+				and approved == false
+			)
 		) and once == true
 	then
 		if wrong_name_sex then
@@ -126,24 +162,6 @@ function love.draw()
 		end
 
 		incorrect()
-	end
-
-	-- CORRECT
-	if
-		(
-			(check_age() == true and check_name_sex() == true and approved == true and denied == false)
-			or ((check_age() == false or check_name_sex == false) and denied == true and approved == false)
-		) and once == true
-	then
-		love.graphics.setColor(1, 1, 1)
-		love.graphics.print("LOG:", font, 0, 0)
-		if wrong_name_sex then
-			bad_name_sex()
-		end
-		if wrong_age then
-			bad_age()
-		end
-		correct()
 	end
 end
 
@@ -157,16 +175,16 @@ function love.keypressed(key)
 	if key == "f5" then
 		love.event.quit("restart")
 	end
-	if key == "a" then
+	if key == "a" and once == false then
 		approved = true
 	end
-	if key == "l" then
+	if key == "l" and once == false then
 		approved = false
 	end
-	if key == "s" then
+	if key == "s" and once == false then
 		denied = true
 	end
-	if key == "k" then
+	if key == "k" and once == false then
 		denied = false
 	end
 	if key == "return" then
@@ -185,9 +203,9 @@ function check_name_sex()
 		return true
 	else
 		if table_contains(female, name) then
-			name_s = "female"
+			real_sex = "female"
 		elseif table_contains(male, name) then
-			name_s = "male"
+			real_sex = "male"
 		end
 
 		return false
@@ -195,7 +213,7 @@ function check_name_sex()
 end
 
 function check_age()
-	if age < 16 then
+	if age < MIN_PASSPORT_AGE then
 		return false
 	end
 	return true
@@ -204,7 +222,11 @@ end
 function bad_name_sex()
 	love.graphics.setColor(1, 0, 0)
 	love.graphics.print(
-		"\nERROR: PASSPORT FORGED" .. "\nDETAILS:" .. "\nSEX: " .. sex .. "\nNAME: " .. name .. "\nNAME SEX: " .. name_s,
+		"\nERROR: PASSPORT FORGED"
+			.. "\nDETAILS:"
+			.. "\n    SEX: " .. sex
+			.. "\n    NAME: " .. name
+			.. "\n    REAL SEX: " .. real_sex,
 		font,
 		0,
 		0
@@ -214,7 +236,12 @@ end
 function bad_age()
 	love.graphics.setColor(1, 0, 0)
 	love.graphics.print(
-		"\nERROR: PASSPORT FORGED" .. "\nDETAILS:" .. "\nMIN PASSPORT AGE: 16" .. "\nAGE: " .. age,
+		"\nERROR: PASSPORT FORGED"
+			.. "\nDETAILS:"
+			.. "\n    MIN PASSPORT AGE: "
+			.. MIN_PASSPORT_AGE
+			.. "\n    ACTUAL AGE: "
+			.. age,
 		font,
 		0,
 		love.graphics.getHeight() / 2
