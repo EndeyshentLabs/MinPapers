@@ -14,6 +14,8 @@ require("country")
 --
 
 local font = nil
+local music_filepath = "test01.ogg"
+local music = nil
 
 -- Constants
 local MAX_AGE = 80
@@ -64,6 +66,11 @@ end
 
 function love.load()
 	font = love.graphics.newFont("Konstruktor-vmmxL.otf", 20)
+
+	music = love.audio.newSource(music_filepath, "static")
+	music:setLooping(true)
+
+	love.audio.play(music)
 
 	loop()
 end
@@ -204,6 +211,13 @@ function love.keypressed(key)
 
 	if key == "f11" then
 		love.window.setFullscreen(not love.window.getFullscreen())
+	end
+	if key == "f10" then
+		love.audio.stop(music)
+	end
+
+	if key == "f9" and music:isPlaying() == false then
+		love.audio.play(music)
 	end
 end
 
