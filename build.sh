@@ -21,7 +21,7 @@ if [[ ! -d $BUILD_DIR ]]; then
 fi
 
 # UNIX
-zip -9 -r ./$NAME.love ./README.md ./LICENSE ./*.lua ./res/ ./res/* ./lib ./lib/*
+zip -9 -r ./$NAME.love ./README.md ./LICENSE ./*.lua ./res/ ./res/* ./lib ./lib/* ./*.otf ./*.ttf ./*.ogg ./*.wav ./*.mp3
 chmod +x ./$NAME.love
 mv ./$NAME.love ./$BUILD_DIR
 
