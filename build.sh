@@ -11,35 +11,55 @@ function need () {
 	fi
 }
 
-need 7z
+function NOTE() {
+	printf "[NOTE] $1\n"
+}
+
+if [[ ! -z "${1+x}" && "$1" == "clean" ]]; then
+	NOTE "Cleaning..."
+	rm -rf ./$BUILD_DIR love-* *.zip
+	exit 1
+fi
+
 need wget
 need zip
 need unzip
 
-if [[ ! -d $BUILD_DIR ]]; then
+if [[ ! -d ./$BUILD_DIR ]]; then
 	mkdir -p ./$BUILD_DIR
 fi
 
 # UNIX
-zip -9 -r ./$NAME.love ./README.md ./LICENSE ./*.lua ./res/ ./res/* ./lib ./lib/* ./*.otf ./*.ttf ./*.ogg ./*.wav ./*.mp3
+NOTE "Building for UNIX-like systems..."
+zip -9 -r ./$NAME.love ./README.md ./LICENSE ./*.lua ./res/ ./res/* ./lib ./lib/*
 chmod +x ./$NAME.love
 mv ./$NAME.love ./$BUILD_DIR
+NOTE "Done!"
 
-## Windows
-if [[ ! -d love-11.4-win64 ]]; then
+# Windows
+printf "[NOTE] Building for Windows...\n"
+if [[ ! -d ./love-11.4-win64 ]]; then
+	printf "\t"
+	NOTE "Downloading and unpacking love2d-11.4-win64"
 	wget https://github.com/love2d/love/releases/download/11.4/love-11.4-win64.zip
-	unzip love-11.4-win64.zip
+	unzip ./love-11.4-win64.zip
 	rm love-11.4-win64.zip*
+	printf "\t"
+	NOTE "Done!"
 fi
-cat ./love-11.4-win64/love.exe ./build/$NAME.love > ./$NAME.exe
-cp  ./love-11.4-win64/*.dll ./build/
+cat ./love-11.4-win64/love.exe ./$BUILD_DIR/$NAME.love > ./$NAME.exe
+cp  ./love-11.4-win64/*.dll ./$BUILD_DIR/
 chmod +x ./$NAME.exe # idk why
-mv ./$NAME.exe ./build
+mv ./$NAME.exe ./$BUILD_DIR
+NOTE "Done!"
 
-## Zip-it
+# Zip-it
+NOTE "Making archive..."
 cd ./build
-7z a -tzip ../$NAME.zip .
+zip -9 -r ../$NAME.zip .
 cd ..
+NOTE "Done!"
 
-# Line below is needed for proper syntax highlighting
-# vim:set ft=zsh:
+printf "Build successful!\n"
+
+# vim:set noet sw=4 ts=4 ft=zsh:
