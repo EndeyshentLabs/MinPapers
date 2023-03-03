@@ -31,7 +31,7 @@ fi
 
 # UNIX
 NOTE "Building for UNIX-like systems..."
-zip -9 -r ./$NAME.love ./README.md ./LICENSE ./*.lua ./res/ ./res/* ./lib ./lib/*
+zip -9 -r ./$NAME.love ./README.md ./LICENSE ./*.lua ./*.otf ./*.png ./*.ogg
 chmod +x ./$NAME.love
 mv ./$NAME.love ./$BUILD_DIR
 NOTE "Done!"
