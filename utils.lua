@@ -20,3 +20,11 @@ function setColorHEX(rgba)
 	-- print (love.math.colorFromBytes( rb, gb, bb, ab )) -- prints 0.2 0.4 0.6 0.8
 	love.graphics.setColor(love.math.colorFromBytes(rb, gb, bb, ab))
 end
+
+function isDebug()
+	if arg[#arg] == "-debug" or arg[#arg] == "--debug" then
+		return true
+	else
+		return false
+	end
+end

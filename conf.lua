@@ -5,4 +5,5 @@ function love.conf(t)
 	t.window.minheight = 722
 	t.window.resizable = true
 	t.window.fullscreen = true
+	t.window.icon = "logo.png"
 end

@@ -10,8 +10,7 @@ require("country")
 	#861322  DARK RED
 	#c7e995  LIGHT GREEN
 	#7c9e83  FOREST GREEN
-]]
---
+]]--
 
 local font = nil
 local music_filepath = "test01.ogg"
@@ -21,7 +20,8 @@ local music = nil
 local MAX_AGE = 80
 local MIN_PASSPORT_AGE = 16
 
-local name = "POGLIN" -- Default impossible values
+-- NOTE: impossible values
+local name = "POGLIN"
 local age = -11037
 local country = "Luare"
 local nation = "Luarean"
@@ -67,10 +67,12 @@ end
 function love.load()
 	font = love.graphics.newFont("Konstruktor-vmmxL.otf", 20)
 
-	music = love.audio.newSource(music_filepath, "static")
-	music:setLooping(true)
+	if isDebug() then
+		music = love.audio.newSource(music_filepath, "static")
+		music:setLooping(true)
 
-	love.audio.play(music)
+		love.audio.play(music)
+	end
 
 	loop()
 end
@@ -212,11 +214,11 @@ function love.keypressed(key)
 	if key == "f11" then
 		love.window.setFullscreen(not love.window.getFullscreen())
 	end
-	if key == "f10" then
+
+	if key == "f10" and music then
 		love.audio.stop(music)
 	end
-
-	if key == "f9" and music:isPlaying() == false then
+	if key == "f9" and music and music:isPlaying() == false then
 		love.audio.play(music)
 	end
 end
