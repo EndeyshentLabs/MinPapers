@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -eu
 
-NAME="MinPapers"
-BUILD_DIR="build"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+. "$SCRIPT_DIR/config.fluid"
 
 function need () {
 	if [[ ! $(which $1) ]]; then
@@ -31,7 +32,7 @@ fi
 
 # UNIX
 NOTE "Building for UNIX-like systems..."
-zip -9 -r ./$NAME.love ./README.md ./LICENSE ./*.lua ./*.otf ./*.png ./*.ogg
+zip -9 -r ./$NAME.love $(echo $FILES)
 chmod +x ./$NAME.love
 mv ./$NAME.love ./$BUILD_DIR
 NOTE "Done!"
@@ -55,7 +56,7 @@ NOTE "Done!"
 
 # Zip-it
 NOTE "Making archive..."
-cd ./build
+cd ./$BUILD_DIR
 zip -9 -r ../$NAME.zip .
 cd ..
 NOTE "Done!"

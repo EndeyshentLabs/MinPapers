@@ -1,0 +1,4 @@
+NAME="MinPapers"
+BUILD_DIR="build"
+FILES="README.md LICENSE *.lua *.otf *.png *.ogg"
+# vim:set ft=zsh:
