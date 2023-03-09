@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-set -eu
+set -euo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 . "$SCRIPT_DIR/config.fluid"
 
-function need () {
+function need() {
 	if [[ ! $(which $1) ]]; then
 		printf "$1 is needed to build this project!\n"
 		exit 1
@@ -16,10 +16,22 @@ function NOTE() {
 	printf "[NOTE] $1\n"
 }
 
-if [[ ! -z "${1+x}" && "$1" == "clean" ]]; then
-	NOTE "Cleaning..."
-	rm -rf ./$BUILD_DIR love-* *.zip
-	exit 1
+if [[ ! -z "${1+x}" ]]; then
+	case "$1" in
+		"clean")
+			NOTE "Cleaning..."
+			rm -rf ./$BUILD_DIR love-* *.zip
+			exit 1
+			;;
+		"help")
+			printf "Fluid - build system for games made with Lua and LOVE2D.\n"
+			printf "Usage: $0 <command>\n"
+			printf "Available commands:\n"
+			printf "\thelp - dispay this help message.\n"
+			printf "\tclean - clean build files(in initialized project).\n"
+			exit 1
+			;;
+	esac
 fi
 
 need wget
