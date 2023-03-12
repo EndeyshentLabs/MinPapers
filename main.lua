@@ -89,7 +89,7 @@ function love.draw()
 
 	setColorHEX("#c7e995")
 	love.graphics.print(
-		"PASSPORT"
+			   "PASSPORT"
 			.. "\n    NAME: "
 			.. name
 			.. "\n    AGE: "
@@ -147,6 +147,7 @@ function love.draw()
 			)
 		) and once == true
 	then
+		wrong()
 		if wrong_name_sex then
 			bad_name_sex()
 		end
@@ -162,8 +163,8 @@ function love.draw()
 		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 		setColorHEX("#c7e995")
 		love.graphics.print(
-			"RULES:"
-				.. "\n    MIN PASSPORT AGE: 16"
+				   "RULES:"
+				.. "\n    MIN PASSPORT AGE: " .. MIN_PASSPORT_AGE
 				.. "\n    NATION and COUNTRY: ZOCH"
 				-- .. "\n    FOREIGNERS MUST PROVIDE A VALID VISA" -- TODO: New countries and nations <12-03-23, EndeyshentLabs> --
 				.. "\n    ONLY ONE APPROVAL STATE AT ONCE"
@@ -173,7 +174,8 @@ function love.draw()
 				.. "\n    'L' - CLEAR APPROVE"
 				.. "\n    'K' - CLEAR DENY"
 				.. "\n    'ENTER' - CONFIRM"
-				.. "\n    'R' - RESTART(OR NEXT)"
+				.. "\n    'R' - RESTART"
+				.. "\n    'F5' - RELOAD THE GAME"
 				.. "\nHOW TO PLAY:"
 				.. "\n    1. CHECK NAME AND SEX"
 				.. "\n    1.1. IF INCORRECT, PRESS 'L' THEN 'S' THEN 'ENTER'"
@@ -183,8 +185,6 @@ function love.draw()
 			font,
 			0,
 			0
-			--love.graphics.getWidth()  / 2,
-			--love.graphics.getHeight() / 2
 		)
 	end
 
@@ -219,7 +219,7 @@ function love.keypressed(key)
 	if key == "k" and once == false then
 		denied = false
 	end
-	if key == "return" then
+	if key == "return" and not help_mode then
 		once = true
 	end
 	if key == "f1" then
@@ -264,14 +264,11 @@ end
 function bad_name_sex()
 	setColorHEX("#861322")
 	love.graphics.print(
-		"\nERROR: PASSPORT FORGED"
+			   "\nERROR: PASSPORT FORGED"
 			.. "\nDETAILS:"
-			.. "\n    SEX: "
-			.. sex
-			.. "\n    NAME: "
-			.. name
-			.. "\n    REAL SEX: "
-			.. real_sex,
+			.. "\n    SEX: " .. sex
+			.. "\n    NAME: " .. name
+			.. "\n    REAL SEX: " .. real_sex,
 		font,
 		0,
 		0
@@ -281,15 +278,28 @@ end
 function bad_age()
 	setColorHEX("#861322")
 	love.graphics.print(
-		"\nERROR: PASSPORT FORGED"
+			   "\n\n\n\n\n" -- NOTE: 6 new lines coz bad_name_sex() takes 5 lines
+			.. "\nERROR: PASSPORT FORGED"
 			.. "\nDETAILS:"
-			.. "\n    MIN PASSPORT AGE: "
-			.. MIN_PASSPORT_AGE
-			.. "\n    ACTUAL AGE: "
-			.. age,
+			.. "\n    MIN PASSPORT AGE: " .. MIN_PASSPORT_AGE
+			.. "\n    ACTUAL AGE: " .. age,
 		font,
 		0,
-		love.graphics.getHeight() / 2
+		0
+	)
+end
+
+function bad_nation() -- germans in ww2 be like
+	setColorHEX("#861322")
+	love.graphics.print(
+			   "\n\n\n\n\n\n\n\n\n" -- NOTE: see line 281
+			.. "\nERROR: PASSPORT FORGED"
+			.. "\nDETAILS:"
+			.. "\n    COUNTRY: " .. country
+			.. "\n    NATION: " .. nation,
+		font,
+		0,
+		0
 	)
 end
 
