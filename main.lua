@@ -35,6 +35,8 @@ local once = false
 local wrong_age = false
 local wrong_name_sex = false
 
+local help_mode = true
+
 local function loop()
 	denied = false
 	approved = false
@@ -67,7 +69,7 @@ end
 function love.load()
 	font = love.graphics.newFont("Konstruktor-vmmxL.otf", 20)
 
-	if isDebug() then
+	if false --[[isDebug()]] then
 		music = love.audio.newSource(music_filepath, "static")
 		music:setLooping(true)
 
@@ -103,28 +105,6 @@ function love.draw()
 		0
 	)
 
-	love.graphics.print(
-		"RULES:"
-			.. "\n    MIN PASSPORT AGE: 16"
-			.. "\n    NATION and COUNTRY: ZOCH"
-			.. "\n    ONLY ONE APPROVAL STATE AT ONCE"
-			.. "\nCONTROLS:"
-			.. "\n    'A' - APPROVE"
-			.. "\n    'S' - DENY"
-			.. "\n    'L' - CLEAR APPROVE"
-			.. "\n    'K' - CLEAR DENY"
-			.. "\n    'ENTER' - CONFIRM"
-			.. "\nHOW TO PLAY:"
-			.. "\n    1. CHECK NAME AND SEX"
-			.. "\n    1.1. IF INCORRECT, PRESS 'L' THEN 'S' THEN 'ENTER'"
-			.. "\n    2. CHECK AGE"
-			.. "\n    2.1 IF INCORRECT, PRESS 'L' THEN 'S' THEN 'ENTER'"
-			.. "\n    3. IF ALL IS CORRECT PRESS 'K' THEN 'A' THEN 'ENTER'",
-		font,
-		love.graphics.getWidth() / 2,
-		love.graphics.getHeight() / 2
-	)
-
 	if check_age() == false then
 		wrong_age = true
 	end
@@ -150,14 +130,7 @@ function love.draw()
 			)
 		) and once == true
 	then
-		setColorHEX("#292023")
-		love.graphics.print("WHAT WAS WRONG HERE:", font, 0, 0)
-		if wrong_name_sex then
-			bad_name_sex()
-		end
-		if wrong_age then
-			bad_age()
-		end
+		wrong()
 		correct()
 
 	-- INCORRECT
@@ -183,6 +156,45 @@ function love.draw()
 
 		incorrect()
 	end
+
+	if help_mode then
+		setColorHEX("#292023")
+		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+		setColorHEX("#c7e995")
+		love.graphics.print(
+			"RULES:"
+				.. "\n    MIN PASSPORT AGE: 16"
+				.. "\n    NATION and COUNTRY: ZOCH"
+				-- .. "\n    FOREIGNERS MUST PROVIDE A VALID VISA" -- TODO: New countries and nations <12-03-23, EndeyshentLabs> --
+				.. "\n    ONLY ONE APPROVAL STATE AT ONCE"
+				.. "\nCONTROLS:"
+				.. "\n    'A' - APPROVE"
+				.. "\n    'S' - DENY"
+				.. "\n    'L' - CLEAR APPROVE"
+				.. "\n    'K' - CLEAR DENY"
+				.. "\n    'ENTER' - CONFIRM"
+				.. "\n    'R' - RESTART(OR NEXT)"
+				.. "\nHOW TO PLAY:"
+				.. "\n    1. CHECK NAME AND SEX"
+				.. "\n    1.1. IF INCORRECT, PRESS 'L' THEN 'S' THEN 'ENTER'"
+				.. "\n    2. CHECK AGE"
+				.. "\n    2.1 IF INCORRECT, PRESS 'L' THEN 'S' THEN 'ENTER'"
+				.. "\n    3. IF ALL IS CORRECT PRESS 'K' THEN 'A' THEN 'ENTER'",
+			font,
+			0,
+			0
+			--love.graphics.getWidth()  / 2,
+			--love.graphics.getHeight() / 2
+		)
+	end
+
+	setColorHEX("#c7e995")
+	love.graphics.print(
+		"F1 - TOGGLE HELP",
+		font,
+		third * 2,
+		0
+	)
 end
 
 function love.keypressed(key)
@@ -209,6 +221,9 @@ function love.keypressed(key)
 	end
 	if key == "return" then
 		once = true
+	end
+	if key == "f1" then
+		help_mode = not help_mode
 	end
 
 	if key == "f11" then
@@ -278,11 +293,6 @@ function bad_age()
 	)
 end
 
-function all()
-	check_name_sex()
-	check_age()
-end
-
 function correct()
 	setColorHEX("#7c9e83")
 	love.graphics.rectangle(
@@ -319,4 +329,15 @@ function incorrect()
 		love.graphics.getWidth() / 2 + 1,
 		love.graphics.getHeight() / 2 + 1
 	)
+end
+
+function wrong()
+	setColorHEX("#292023")
+	love.graphics.print("WHAT WAS WRONG HERE:", font, 0, 0)
+	if wrong_name_sex then
+		bad_name_sex()
+	end
+	if wrong_age then
+		bad_age()
+	end
 end

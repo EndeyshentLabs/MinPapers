@@ -9,6 +9,13 @@ $ git clone https://github.com/EndeyshentLabs/MinPapers
 $ love . # UNIX-like
 ```
 
+## Build-it
+
+
+```console
+$ ./fluid
+```
+
 ## Made With
 
 - LOVE2D
